@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">MiniProjectConnexus</string>
     <string name="sign_out">Sign Out</string>
+    <string name="action_settings">Settings</string>
+    <string name="project_name">Connexus</string>
+    <string name="view_stream">View Stream</string>
 </resources>

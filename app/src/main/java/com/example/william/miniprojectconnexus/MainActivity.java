@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -40,6 +43,9 @@ public class MainActivity extends AppCompatActivity  implements  GoogleApiClient
 
         // Button listeners
         findViewById(R.id.sign_in_button).setOnClickListener(this);
+        findViewById(R.id.sign_out_button).setOnClickListener(this);
+        findViewById(R.id.button_to_view_stream).setOnClickListener(this);
+
 //        findViewById(R.id.sign_out_button).setOnClickListener(this);
 
         // [START configure_signin]
@@ -65,7 +71,92 @@ public class MainActivity extends AppCompatActivity  implements  GoogleApiClient
         signInButton.setSize(SignInButton.SIZE_STANDARD);
         // [END customize_button]
     }
+    // [START signIn]
+    private void signIn() {
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+    // [END signIn]
 //
+    // [START signOut]
+    private void signOut() {
+        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(Status status) {
+                        // [START_EXCLUDE]
+                        //updateUI(false);
+                        // [END_EXCLUDE]
+                    }
+                });
+    }
+    //@Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
+        // be available.
+        Log.d(TAG, "onConnectionFailed:" + connectionResult);
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.sign_in_button:
+                Log.d("Debug", "Button Clicked, Signing In");
+                signIn();
+                break;
+            case R.id.sign_out_button:
+                signOut();
+                break;
+            case R.id.button_to_view_stream:
+                Log.d("Debug", "Button Clicked, Going To View Stream");
+                Intent i = new Intent(this, AllStream.class);
+                startActivity(i);
+                setContentView(R.layout.activity_all_stream);
+//            case R.id.disconnect_button:
+//                revokeAccess();
+//                break;
+        }
+//
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_all_stream, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.AllStream:
+                startActivity(new Intent(this, AllStream.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        //respond to menu item selection
+
+    }
+}
+// [END signOut]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //
 //    @Override
 //    public void onStart() {
 //        super.onStart();
@@ -126,26 +217,7 @@ public class MainActivity extends AppCompatActivity  implements  GoogleApiClient
 //    }
 //    // [END handleSignInResult]
 //
-    // [START signIn]
-    private void signIn() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
-    // [END signIn]
-//
-    // [START signOut]
-    private void signOut() {
-        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        // [START_EXCLUDE]
-                        //updateUI(false);
-                        // [END_EXCLUDE]
-                    }
-                });
-    }
-    // [END signOut]
+
 //
 //    // [START revokeAccess]
 //    private void revokeAccess() {
@@ -161,12 +233,7 @@ public class MainActivity extends AppCompatActivity  implements  GoogleApiClient
 //    }
 //    // [END revokeAccess]
 //
-    //@Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
-        // be available.
-        Log.d(TAG, "onConnectionFailed:" + connectionResult);
-    }
+
 //
 //    @Override
 //    protected void onStop() {
@@ -202,20 +269,7 @@ public class MainActivity extends AppCompatActivity  implements  GoogleApiClient
 //            findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
 //        }
 //    }
-
 //    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.sign_in_button:
-                signIn();
-                break;
-            case R.id.sign_out_button:
-                signOut();
-                break;
-//            case R.id.disconnect_button:
-//                revokeAccess();
-//                break;
-        }
+//    protected void onPostExecute(String result){
 //
-    }
-}
+//    }
