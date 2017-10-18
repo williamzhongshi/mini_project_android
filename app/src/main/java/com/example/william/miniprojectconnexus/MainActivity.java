@@ -137,6 +137,37 @@ public class MainActivity extends AppCompatActivity  implements  GoogleApiClient
         //respond to menu item selection
 
     }
+
+        // [START onActivityResult]
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            handleSignInResult(result);
+        }
+    }
+    // [END onActivityResult]
+    private void handleSignInResult(GoogleSignInResult result) {
+        Log.d(TAG, "handleSignInResult:" + result.isSuccess());
+        if (result.isSuccess()) {
+            // Signed in successfully, show authenticated UI.
+            GoogleSignInAccount acct = result.getSignInAccount();
+            Log.d("Debug", "Sign-in result " + acct.toString());
+            Intent i = new Intent(this, AllStream.class);
+            startActivity(i);
+            setContentView(R.layout.activity_all_stream);
+//            mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
+//            updateUI(true);
+        } else {
+            // Signed out, show unauthenticated UI.
+            Log.d("Debug", "Not signed in ");
+//            updateUI(false);
+        }
+    }
+
 }
 // [END signOut]
 
