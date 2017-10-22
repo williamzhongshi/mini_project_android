@@ -1,6 +1,7 @@
 package com.example.william.miniprojectconnexus;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.View;
@@ -8,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+
+import com.google.android.gms.auth.api.Auth;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -55,6 +58,12 @@ public class ImageAdaptor extends BaseAdapter {
             imageView = (ImageView) view;
         }
         imageView.setImageBitmap(streamInfos.get(i).getBitmap());
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mContext.startActivity(new Intent(mContext, AllStream.class));
+            }
+        });
 
         Log.d("Debug","set image to adaptor: " + streamInfos.get(i).getBitmap());
 
