@@ -13,4 +13,7 @@
     <item
         android:id="@+id/AllStream"
         android:title="AllStream"/>
+    <item
+        android:id="@+id/SearchStream"
+        android:title="SearchStream"/>
 </menu>

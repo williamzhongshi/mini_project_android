@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.william.miniprojectconnexus.SearchStream">
+
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <TextView
+            android:id="@+id/search_text_view_id"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="@string/project_name"
+            android:textAlignment="center" />
+
+        <EditText
+            android:id="@+id/search_stream"
+            android:layout_width="234dp"
+            android:layout_height="103dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Search Stream" />
+
+        <Button
+            android:id="@+id/search_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|left"
+            android:layout_weight="1"
+            android:text="Search"
+            app:layout_anchor="@+id/include"
+            app:layout_anchorGravity="top|right" />
+
+        <!--<android.support.design.widget.FloatingActionButton-->
+        <!--android:id="@+id/fab"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="bottom|end"-->
+        <!--android:layout_margin="@dimen/fab_margin"-->
+        <!--app:srcCompat="@android:drawable/ic_dialog_email"></android.support.design.widget.FloatingActionButton>-->
+</android.support.design.widget.AppBarLayout>
+
+    <GridView
+        android:id="@+id/search_gridview"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_weight="40"
+        android:columnWidth="90dp"
+        android:horizontalSpacing="10dp"
+        android:numColumns="4"
+        android:rowCount="2"
+        android:verticalSpacing="40dp"></GridView>
+    <!--<GridView-->
+        <!--android:id="@+id/gridview"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="70"-->
+        <!--android:autofillHints="@string/common_google_play_services_enable_button"-->
+        <!--android:background="@drawable/common_full_open_on_phone"-->
+        <!--android:clickable="false"-->
+        <!--android:columnWidth="90dp"-->
+        <!--android:horizontalSpacing="10dp"-->
+        <!--android:numColumns="4"-->
+        <!--android:verticalSpacing="10dp"></GridView>-->
+
+    <Button
+        android:id="@+id/more_search_result"
+        android:layout_width="214dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|right"
+        android:text="More Search Result"
+        app:layout_anchor="@+id/include"
+        app:layout_anchorGravity="bottom|left" />
+
+    <!--<android.support.v7.widget.Toolbar-->
+        <!--android:id="@+id/toolbar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="66dp"-->
+        <!--android:background="?attr/colorPrimary"-->
+        <!--app:popupTheme="@style/AppTheme.PopupOverlay" />-->
+
+</android.support.v7.widget.LinearLayoutCompat>
