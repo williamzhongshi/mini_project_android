@@ -48,6 +48,7 @@ public class ImageAdaptor extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         ImageView imageView;
+        final int stream_index = i;
         if (view == null) {
             // if it's not recycled, initialize some attributes
             imageView = new ImageView(mContext);
@@ -61,7 +62,9 @@ public class ImageAdaptor extends BaseAdapter {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mContext.startActivity(new Intent(mContext, AllStream.class));
+                Intent stream_view = new Intent(mContext, ViewStream.class);
+                stream_view.putExtra("stream_name", streamInfos.get(stream_index).getName());
+                mContext.startActivity(stream_view);
             }
         });
 

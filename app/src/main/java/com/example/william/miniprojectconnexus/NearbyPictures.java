@@ -1,22 +1,20 @@
-/**
- * Created by William on 10/16/2017.
- */
-
 package com.example.william.miniprojectconnexus;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class AllStream extends AppCompatActivity {
+public class NearbyPictures extends AppCompatActivity {
+
+    public int image_offset = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_all_stream);
+        setContentView(R.layout.activity_nearby_pictures);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
@@ -31,7 +29,7 @@ public class AllStream extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        new Thread(new StreamBackend(this)).start();
+        new Thread(new NearbyPicturesBackend(this, (double) 22, (double) 121, image_offset)).start();
     }
 
     @Override
@@ -60,6 +58,4 @@ public class AllStream extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
 }
-

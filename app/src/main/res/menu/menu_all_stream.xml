@@ -16,4 +16,8 @@
     <item
         android:id="@+id/SearchStream"
         android:title="SearchStream"/>
+
+    <item
+        android:id="@+id/NearbyPictures"
+        android:title="NearbyPictures"/>
 </menu>
