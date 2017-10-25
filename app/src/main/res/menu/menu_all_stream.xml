@@ -20,4 +20,7 @@
     <item
         android:id="@+id/NearbyPictures"
         android:title="NearbyPictures"/>
+    <item
+        android:id="@+id/Camera"
+        android:title="Camera"/>
 </menu>

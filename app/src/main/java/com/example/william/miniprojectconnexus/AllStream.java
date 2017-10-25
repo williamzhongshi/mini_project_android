@@ -57,6 +57,10 @@ public class AllStream extends AppCompatActivity {
             startActivity(new Intent(this, NearbyPictures.class));
             return true;
         }
+        if (id == R.id.Camera) {
+            startActivity(new Intent(this, Camera.class));
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }

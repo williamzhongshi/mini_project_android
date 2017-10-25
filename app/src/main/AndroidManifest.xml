@@ -4,6 +4,11 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-feature android:name="android.hardware.camera2.full" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -28,7 +33,8 @@
             android:name=".SearchStream"
             android:label="@string/title_activity_search_stream"
             android:theme="@style/AppTheme" />
-        <activity android:name=".NearbyPictures"></activity>
+        <activity android:name=".NearbyPictures" />
+        <activity android:name=".Camera"></activity>
     </application>
 
 </manifest>
