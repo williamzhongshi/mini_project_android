@@ -44,11 +44,11 @@
     </GridView>
 
     <Button
-        android:id="@+id/more__result"
+        android:id="@+id/more_result"
         android:layout_width="214dp"
         android:layout_height="wrap_content"
         android:layout_gravity="top|right"
-        android:text="More Search Result"
+        android:text="More Result"
         app:layout_anchor="@+id/include"
         app:layout_anchorGravity="bottom|left" />
 

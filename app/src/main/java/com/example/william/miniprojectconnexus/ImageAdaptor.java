@@ -68,7 +68,7 @@ public class ImageAdaptor extends BaseAdapter {
             }
         });
 
-        Log.d("Debug","set image to adaptor: " + streamInfos.get(i).getBitmap());
+        Log.d("Debug","set image to adaptor: " + streamInfos.get(i).getBitmap() + streamInfos.get(i).getCoverUrl());
 
         return imageView;
     }

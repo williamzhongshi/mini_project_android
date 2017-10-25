@@ -4,10 +4,13 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
-public class NearbyPictures extends AppCompatActivity {
+public class NearbyPictures extends AppCompatActivity implements View.OnClickListener {
 
     public int image_offset = 0;
 
@@ -17,6 +20,8 @@ public class NearbyPictures extends AppCompatActivity {
         setContentView(R.layout.activity_nearby_pictures);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        image_offset = 0;
+        findViewById(R.id.more_result).setOnClickListener(this);
     }
 
     @Override
@@ -29,6 +34,7 @@ public class NearbyPictures extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        image_offset = 0;
         new Thread(new NearbyPicturesBackend(this, (double) 22, (double) 121, image_offset)).start();
     }
 
@@ -57,5 +63,17 @@ public class NearbyPictures extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.more_result:
+                TextView tv2 = (TextView) findViewById(R.id.search_stream);
+                String text2 = tv2.getText().toString();
+                Log.d("Debug", "Button Clicked, Searching " + text2);
+                image_offset += 8;
+                new Thread(new SearchStreamBackend(this, text2, image_offset)).start();
+                break;
+        }
     }
 }
