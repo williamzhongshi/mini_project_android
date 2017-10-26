@@ -63,12 +63,21 @@
                 android:layout_height="0dp"
                 android:layout_weight="50"
                 android:text="Search"/>
-        </android.support.v7.widget.LinearLayoutCompat>
 
-        <android.support.v7.widget.AppCompatImageView
+        </android.support.v7.widget.LinearLayoutCompat>
+        <android.support.v7.widget.LinearLayoutCompat
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="20"/>
+            android:layout_weight="20"
+            android:orientation="vertical">
+
+        <Button
+            android:id="@+id/to_nearby_pictures"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="50"
+            android:text="Nearby"/>
+        </android.support.v7.widget.LinearLayoutCompat>
 
     </android.support.v7.widget.LinearLayoutCompat>
     <Button

@@ -8,10 +8,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
-public class AllStream extends AppCompatActivity {
+public class AllStream extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +21,7 @@ public class AllStream extends AppCompatActivity {
         setContentView(R.layout.activity_all_stream);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        findViewById(R.id.to_nearby_pictures).setOnClickListener(this);
         new Thread(new StreamBackend(this)).start();
     }
 
@@ -62,5 +65,16 @@ public class AllStream extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-}
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.to_nearby_pictures:
+                //TextView tv2 = (TextView) findViewById(R.id.more_result);
+                //String text2 = tv2.getText().toString();
+                Log.d("Debug", "Button Clicked, go to nearby pictures ");
+                startActivity(new Intent(this, NearbyPictures.class));
+                break;
 
+        }
+    }
+}

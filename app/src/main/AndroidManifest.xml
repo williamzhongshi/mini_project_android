@@ -32,6 +32,7 @@
             android:label="@string/title_activity_search_stream"
             android:theme="@style/AppTheme" />
         <activity android:name=".NearbyPictures"></activity>
+        <activity android:name=".ViewStream"></activity>
     </application>
 
 </manifest>
