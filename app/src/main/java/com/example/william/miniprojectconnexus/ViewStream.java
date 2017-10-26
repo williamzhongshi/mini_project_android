@@ -31,8 +31,8 @@ public class ViewStream extends AppCompatActivity implements View.OnClickListene
 
     // URL of object to be parsed
     //String JsonURL = "https://jsonplaceholder.typicode.com/photos";
-    String JsonURL = "http://williamztest.appspot.com/and_viewpics?name=";
-
+    //String JsonURL = "http://williamztest.appspot.com/and_viewpics?name=";
+    String JsonURL = "http://10.0.2.2:8080/view_stream/and_viewpics?name=";
     String stream_name= "Test Stream";
     String offset = "";
 

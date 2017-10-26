@@ -19,6 +19,7 @@ public class AllStream extends AppCompatActivity {
         setContentView(R.layout.activity_all_stream);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        new Thread(new StreamBackend(this)).start();
     }
 
     @Override
