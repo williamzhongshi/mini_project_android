@@ -3,6 +3,9 @@
     package="com.example.william.miniprojectconnexus">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-feature android:name="android.hardware.location.gps" />
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -35,6 +38,8 @@
             android:theme="@style/AppTheme" />
         <activity android:name=".NearbyPictures" />
         <activity android:name=".Camera"></activity>
+        <activity android:name=".NearbyPictures"></activity>
+        <activity android:name=".ViewStream"></activity>
     </application>
 
 </manifest>

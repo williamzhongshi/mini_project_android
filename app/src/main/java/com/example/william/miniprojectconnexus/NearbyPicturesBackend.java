@@ -67,7 +67,7 @@ public class NearbyPicturesBackend implements Runnable{
                                 String cover_url = c.getString("url");
 
                                 ImageLoader loader = MySingleton.getInstance(context).getImageLoader();
-                                cover_url = "https://i.ytimg.com/vi/AGsvuFB_aEY/maxresdefault.jpg";
+                                //cover_url = "https://i.ytimg.com/vi/AGsvuFB_aEY/maxresdefault.jpg";
                                 //cover_url = "http://lh3.googleusercontent.com/JdpPGgD-_TvNKFw9jXxvIX-wCGJLF0hEAd8gOuuUWy53K3uvBMj0MrQQVQNhB_Dgpr78faG8I-L27T_jcTNyLzVfrg";
                                 if (cover_url.contains("localhost")) {
                                     cover_url = cover_url.replace("localhost", "10.0.2.2");

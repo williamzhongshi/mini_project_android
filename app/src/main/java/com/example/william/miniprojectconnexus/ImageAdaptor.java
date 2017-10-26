@@ -63,12 +63,12 @@ public class ImageAdaptor extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 Intent stream_view = new Intent(mContext, ViewStream.class);
-                stream_view.putExtra("stream_name", streamInfos.get(stream_index).getName());
+                stream_view.putExtra("STREAM_NAME", streamInfos.get(stream_index).getName());
                 mContext.startActivity(stream_view);
             }
         });
 
-        Log.d("Debug","set image to adaptor: " + streamInfos.get(i).getBitmap());
+        Log.d("Debug","set image to adaptor: " + streamInfos.get(i).getBitmap() + streamInfos.get(i).getCoverUrl());
 
         return imageView;
     }
