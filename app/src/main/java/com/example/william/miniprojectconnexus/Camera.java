@@ -119,8 +119,22 @@ public class Camera extends AppCompatActivity {
     TextureView.SurfaceTextureListener textureListener = new TextureView.SurfaceTextureListener() {
         @Override
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-            //open your camera here
-            openCamera();
+            mSurfaceTextureAvailable = true;
+            if (ActivityCompat.checkSelfPermission(Camera.this, android.Manifest.permission.CAMERA)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(Camera.this, new String[]{android.Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
+                return;
+            }else {
+
+                // Execute some code after 500 milliseconds have passed
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        setupCameraIfPossible();
+                    }
+                }, 500);
+            }
         }
 
         public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
@@ -134,6 +148,9 @@ public class Camera extends AppCompatActivity {
         public void onSurfaceTextureUpdated(SurfaceTexture surface) {
         }
     };
+
+
+
     private final CameraDevice.StateCallback stateCallback = new CameraDevice.StateCallback() {
         @Override
         public void onOpened(CameraDevice camera) {
@@ -305,6 +322,13 @@ public class Camera extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+    private void setupCameraIfPossible() {
+        if (mSurfaceTextureAvailable && mPermissionsGranted) {
+            openCamera();
+        }
+    }
+    private boolean mPermissionsGranted;
+    private boolean mSurfaceTextureAvailable;
     private void openCamera() {
         CameraManager manager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
         Log.e(TAG, "is camera open");
