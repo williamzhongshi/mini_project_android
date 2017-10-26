@@ -4,20 +4,66 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.william.miniprojectconnexus.AllStream">
+    tools:context="com.example.william.miniprojectconnexus.Camera">
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="382dp"
+        android:layout_height="47dp"
+        android:text="Connexus!!!"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp" />
     <TextureView
         android:id="@+id/texture"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="90dp" />
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="90dp"/>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/main_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/btn_takepicture"
-        android:layout_alignParentTop="true"/>
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        tools:context="com.example.william.miniprojectconnexus.Camera"
+        android:layout_above="@+id/go_to_stream"
+        android:layout_alignEnd="@+id/textView2">
+
+        <ImageButton
+            android:id="@+id/take_photo"
+            android:layout_width="143dp"
+            android:layout_height="50dp"
+            android:src="@drawable/camera"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+             />
+
+        <ImageButton
+            android:id="@+id/choose"
+            android:layout_width="143dp"
+            android:layout_height="50dp"
+            android:src="@drawable/choose"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            />
+    </LinearLayout>
     <Button
-        android:id="@+id/btn_takepicture"
+        android:id="@+id/go_to_stream"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="16dp"
         android:layout_marginTop="16dp"
-        android:text="@string/take_picture" />
+        android:text="@string/Stream" />
+
 </RelativeLayout>

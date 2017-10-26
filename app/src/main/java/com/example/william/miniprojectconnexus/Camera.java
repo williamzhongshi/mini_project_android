@@ -1,9 +1,13 @@
 package com.example.william.miniprojectconnexus;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
 import android.graphics.SurfaceTexture;
+import android.graphics.drawable.BitmapDrawable;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraCharacteristics;
@@ -15,13 +19,13 @@ import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
@@ -29,6 +33,8 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -44,8 +50,10 @@ import java.util.List;
 public class Camera extends AppCompatActivity {
 
     private static final String TAG = "AndroidCameraApi";
-    private Button takePictureButton;
+    private ImageButton takePictureButton;
+    private ImageButton usePictureButton;
     private TextureView textureView;
+    private String picturePath = Environment.getExternalStorageDirectory()+"/pic.jpg";
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 90);
@@ -65,14 +73,19 @@ public class Camera extends AppCompatActivity {
     private boolean mFlashSupported;
     private Handler mBackgroundHandler;
     private HandlerThread mBackgroundThread;
+    private Button goToStream;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
         textureView = (TextureView) findViewById(R.id.texture);
         assert textureView != null;
+
+
         textureView.setSurfaceTextureListener(textureListener);
-        takePictureButton = (Button) findViewById(R.id.btn_takepicture);
+        takePictureButton = (ImageButton) findViewById(R.id.take_photo);
         assert takePictureButton != null;
         takePictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +93,28 @@ public class Camera extends AppCompatActivity {
                 takePicture();
             }
         });
+
+        goToStream = (Button) findViewById(R.id.go_to_stream);
+
+        goToStream.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Camera.this, AllStream.class);
+                startActivity(intent);
+            }
+        });
+
+        usePictureButton = (ImageButton) findViewById(R.id.choose);
+        usePictureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Camera.this, UploadImage.class);
+                intent.putExtra("path", picturePath);
+                startActivity(intent);
+            }
+        });
+
+
     }
     TextureView.SurfaceTextureListener textureListener = new TextureView.SurfaceTextureListener() {
         @Override
@@ -87,7 +122,7 @@ public class Camera extends AppCompatActivity {
             //open your camera here
             openCamera();
         }
-        @Override
+
         public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
             // Transform you image captured size according to the surface width and height
         }
@@ -121,7 +156,7 @@ public class Camera extends AppCompatActivity {
         @Override
         public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request, TotalCaptureResult result) {
             super.onCaptureCompleted(session, request, result);
-            Toast.makeText(Camera.this, "Saved:" + file, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(Camera.this, "Saved:" + file, Toast.LENGTH_SHORT).show();
             createCameraPreview();
         }
     };
@@ -152,22 +187,20 @@ public class Camera extends AppCompatActivity {
             if (characteristics != null) {
                 jpegSizes = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP).getOutputSizes(ImageFormat.JPEG);
             }
-            int width = 640;
-            int height = 480;
+            int width = textureView.getWidth();
+            int height = textureView.getHeight();
             if (jpegSizes != null && 0 < jpegSizes.length) {
                 width = jpegSizes[0].getWidth();
                 height = jpegSizes[0].getHeight();
             }
-            ImageReader reader = ImageReader.newInstance(width, height, ImageFormat.JPEG, 1);
+            ImageReader reader = ImageReader.newInstance(height, width, ImageFormat.JPEG, 1);
             List<Surface> outputSurfaces = new ArrayList<Surface>(2);
             outputSurfaces.add(reader.getSurface());
             outputSurfaces.add(new Surface(textureView.getSurfaceTexture()));
             final CaptureRequest.Builder captureBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE);
             captureBuilder.addTarget(reader.getSurface());
             captureBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO);
-            // Orientation
-            int rotation = getWindowManager().getDefaultDisplay().getRotation();
-            captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, ORIENTATIONS.get(rotation));
+            captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, ORIENTATIONS.get(Surface.ROTATION_0));
             final File file = new File(Environment.getExternalStorageDirectory()+"/pic.jpg");
             ImageReader.OnImageAvailableListener readerListener = new ImageReader.OnImageAvailableListener() {
                 @Override
@@ -179,6 +212,23 @@ public class Camera extends AppCompatActivity {
                         byte[] bytes = new byte[buffer.capacity()];
                         buffer.get(bytes);
                         save(bytes);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                File imageFile = new File(Environment.getExternalStorageDirectory()+"/pic.jpg");
+                                ImageView jpgView = (ImageView)findViewById(R.id.imageView);
+                                BitmapDrawable d = new BitmapDrawable(getResources(), imageFile.getAbsolutePath());
+                                jpgView.setImageDrawable(d);
+
+                                Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+                                jpgView.setMaxHeight(textureView.getHeight());
+                                jpgView.setMaxWidth(textureView.getWidth());
+                                jpgView.setRotation(90.0F);
+                                jpgView.setScaleType(ImageView.ScaleType.FIT_XY);
+                                jpgView.setImageBitmap(bitmap);
+
+                            }
+                        });
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     } catch (IOException e) {
