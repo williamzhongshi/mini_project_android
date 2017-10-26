@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 
 public class AllStream extends AppCompatActivity implements View.OnClickListener {
 
@@ -22,6 +23,7 @@ public class AllStream extends AppCompatActivity implements View.OnClickListener
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         findViewById(R.id.to_nearby_pictures).setOnClickListener(this);
+        findViewById(R.id.to_search_stream).setOnClickListener(this);
         new Thread(new StreamBackend(this)).start();
     }
 
@@ -73,6 +75,17 @@ public class AllStream extends AppCompatActivity implements View.OnClickListener
                 //String text2 = tv2.getText().toString();
                 Log.d("Debug", "Button Clicked, go to nearby pictures ");
                 startActivity(new Intent(this, NearbyPictures.class));
+                break;
+            case R.id.to_search_stream:
+                //TextView tv2 = (TextView) findViewById(R.id.more_result);
+                //String text2 = tv2.getText().toString();
+                Log.d("Debug", "Button Clicked, go to search streams");
+                Intent i = new Intent(this, SearchStream.class);
+                EditText edittext = (EditText) findViewById(R.id.all_stream_search_text);
+                String search_text = edittext.getText().toString();
+                Log.d("Debug", "Calling search stream using name: " + search_text);
+                i.putExtra("SEARCH_TEXT", search_text);
+                startActivity(i);
                 break;
 
         }

@@ -10,30 +10,32 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class SearchStream extends AppCompatActivity implements View.OnClickListener {
     public int image_offset = 0;
+    String search_text;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_stream);
+
+
+
         //Toolbar toolbar = (Toolbar) findViewById(R.id.search_toolbar);
         //setSupportActionBar(toolbar);
         findViewById(R.id.search_button).setOnClickListener(this);
         findViewById(R.id.more_search_result).setOnClickListener(this);
 
-//        new Thread(new SearchStreamBackend(this)).start();
-
-//
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            search_text = extras.getString("SEARCH_TEXT");
+            Log.d("Debug", "Inside Search, got SEARCH_TEXT " + search_text);
+            TextView tv = (TextView) findViewById(R.id.search_stream);
+            tv.setText(search_text);
+            new Thread(new SearchStreamBackend(this, search_text, image_offset)).start();
+        }
     }
 
     @Override
@@ -82,10 +84,10 @@ public class SearchStream extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.more_search_result:
                 TextView tv2 = (TextView) findViewById(R.id.search_stream);
-                String text2 = tv2.getText().toString();
-                Log.d("Debug", "Button Clicked, Searching " +  text2);
+                search_text = tv2.getText().toString();
+                Log.d("Debug", "Button Clicked, Searching " +  search_text);
                 image_offset+=8;
-                new Thread(new SearchStreamBackend(this, text2, image_offset)).start();
+                new Thread(new SearchStreamBackend(this, search_text, image_offset)).start();
                 break;
         }
     }

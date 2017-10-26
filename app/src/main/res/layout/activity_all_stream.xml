@@ -53,12 +53,14 @@
             android:layout_weight="80"
             android:orientation="vertical">
             <EditText
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="50"
+                android:id="@+id/all_stream_search_text"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="50"
                 android:textSize="10dp"
                 android:hint="Please Type Search Here!"/>
             <Button
+                android:id="@+id/to_search_stream"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="50"
