@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -140,6 +139,13 @@ public class UploadImage extends AppCompatActivity implements View.OnClickListen
 
         //Getting the actual path of the image
         Log.e("ImageUpload", "Inside Upload Mulitpart|" + filePath);
+        String cameraPath = getIntent().getStringExtra("path");
+        if(cameraPath != null) {
+            filepath = cameraPath;
+            stream_name = getIntent().getStringExtra("Stream");
+        }
+        Log.e("ImageUpload", "stream file|" + filepath +"|"+ stream_name);
+
 
         try {
             String uploadId = UUID.randomUUID().toString();
@@ -169,6 +175,11 @@ public class UploadImage extends AppCompatActivity implements View.OnClickListen
         if (v == buttonUpload) {
             uploadMultipart();
 
+        }
+        if (v == buttonCamera) {
+            Intent intent = new Intent(UploadImage.this, Camera.class);
+            intent.putExtra("Stream", stream_name);
+            startActivity(intent);
         }
     }
 }

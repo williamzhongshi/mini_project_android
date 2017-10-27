@@ -74,6 +74,7 @@ public class Camera extends AppCompatActivity {
     private Handler mBackgroundHandler;
     private HandlerThread mBackgroundThread;
     private Button goToStream;
+    private String streamName;
 
 
     @Override
@@ -110,11 +111,11 @@ public class Camera extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(Camera.this, UploadImage.class);
                 intent.putExtra("path", picturePath);
+                intent.putExtra("Stream", streamName);
                 startActivity(intent);
             }
         });
-
-
+        streamName = getIntent().getStringExtra("Stream");
     }
     TextureView.SurfaceTextureListener textureListener = new TextureView.SurfaceTextureListener() {
         @Override
