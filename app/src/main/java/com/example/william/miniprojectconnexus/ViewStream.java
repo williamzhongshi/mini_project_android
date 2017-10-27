@@ -31,9 +31,10 @@ public class ViewStream extends AppCompatActivity implements View.OnClickListene
 
     // URL of object to be parsed
     //String JsonURL = "https://jsonplaceholder.typicode.com/photos";
-    String JsonURL = "http://williamztest.appspot.com/and_viewpics?name=";
+    //String JsonURL = "http://10.0.2.2:8080/view_stream/and_viewpics?name=Cats";
+    String JsonURL= "http://williamztest2-182503.appspot.com/view_stream/and_viewpics?name=test%20geo";
 
-    String stream_name= "Test Stream";
+    String stream_name= "Cats";
     String offset = "";
 
     //this needs to be changed to
@@ -52,7 +53,7 @@ public class ViewStream extends AppCompatActivity implements View.OnClickListene
     //test code
     private ArrayList<String> mEntries = new ArrayList<String>();
     String photoURL="";
-    int offsetInt = 16;
+    int offsetInt = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,23 +93,27 @@ public class ViewStream extends AppCompatActivity implements View.OnClickListene
         streamsBtn = (Button) findViewById(R.id.streamsButton);
         streamsBtn.setOnClickListener(this);
 
-        /* The following code gets the JSON results as an array
+        // The following code gets the JSON results as an array
+
         JsonArrayRequest request = new JsonArrayRequest(JsonURL,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray jsonArray) {
+                        Log.e("Volley:", "JSON Array");
                         for(int i = 0; i < jsonArray.length(); i++) {
+                            Log.e("Volley:", "JSON Array:Inside Loop");
                         //for(int i = 0; i < offsetInt; i++) {
                             try {
-                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                photoURL = jsonObject.getString("url");
-                                Log.e("photo",photoURL);
-
+                                //JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                photoURL = jsonArray.get(i).toString();
+                                //photoURL = jsonObject.getString("url");
+                                Log.e("photo", photoURL);
 
                                 mEntries.add(photoURL);
                             }
-                            catch(JSONException e) {
-                                mEntries.add("Error: " + e.getLocalizedMessage());
+                            catch(JSONException e)
+                            {
+                                Log.e("Volley", e.getLocalizedMessage());
                             }
                         }
 
@@ -134,9 +139,9 @@ public class ViewStream extends AppCompatActivity implements View.OnClickListene
         requestQueue.add(request);
 
         //Display the results in the grid.
-        */
 
 
+        /*
         JsonObjectRequest obreq = new JsonObjectRequest(Request.Method.GET, JsonURL, null,
                 new Response.Listener<JSONObject>() {
 
@@ -146,7 +151,7 @@ public class ViewStream extends AppCompatActivity implements View.OnClickListene
                             JSONObject obj = response.getJSONObject("ImgObj");
                             int offset = obj.getInt("offset");
                             arrPhotos = obj.getJSONArray("images");
-
+                            Log.e("Volley", "Inside onResponse");
                         }
                         catch (JSONException e) {
                             // If an error occurs, this prints the error to the log
@@ -155,6 +160,7 @@ public class ViewStream extends AppCompatActivity implements View.OnClickListene
                         }
 
                         if (arrPhotos != null) {
+                            Log.e("Volley","Returned a result");
                             for (int i=0; i< arrPhotos.length(); i++) {
                                 try {
                                     mEntries.add(arrPhotos.getString(i));

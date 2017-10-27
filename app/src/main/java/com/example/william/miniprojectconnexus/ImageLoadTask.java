@@ -40,6 +40,7 @@ public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
         } catch (Exception e) {
             //e.printStackTrace();
             Log.e("ImageLoadTask","Error getting Bitmap");
+            Log.e("ImageLoadTask",e.getLocalizedMessage());
             return null;
         }
 

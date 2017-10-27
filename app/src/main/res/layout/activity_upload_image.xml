@@ -27,7 +27,8 @@
             android:id="@+id/buttonChoose"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Choose from your library" />
+            android:text="Choose from your library"
+            android:clickable="false"/>
 
         <Button
             android:id="@+id/buttonCamera"
@@ -52,7 +53,8 @@
             android:id="@+id/buttonUpload"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Upload" />
+            android:text="Upload"
+            android:clickable="false"/>
 
         <TextView
             android:id="@+id/textStream"
