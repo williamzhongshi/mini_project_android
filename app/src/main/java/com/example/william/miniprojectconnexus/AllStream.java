@@ -15,7 +15,7 @@ import android.view.View;
 import android.widget.EditText;
 
 public class AllStream extends AppCompatActivity implements View.OnClickListener {
-
+    private String user_email = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,7 +91,13 @@ public class AllStream extends AppCompatActivity implements View.OnClickListener
                 i.putExtra("SEARCH_TEXT", search_text);
                 startActivity(i);
                 break;
-
+            case R.id.my_subscription:
+                //TextView tv2 = (TextView) findViewById(R.id.more_result);
+                //String text2 = tv2.getText().toString();
+                Log.d("Debug", "Button Clicked, go to allstream with subscription only");
+                i = new Intent(this, NearbyPictures.class);
+                startActivity(i);
+                break;
         }
     }
 }
