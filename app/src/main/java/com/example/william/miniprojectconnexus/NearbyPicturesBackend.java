@@ -1,6 +1,8 @@
 package com.example.william.miniprojectconnexus;
+import android.content.ClipDescription;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.GridView;
 import android.widget.Toast;
@@ -11,6 +13,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -34,6 +37,11 @@ public class NearbyPicturesBackend implements Runnable{
     private double lat;
     private double lng;
     private int image_offset;
+    int offset = 0;
+    String photoURL="";
+    private ArrayList<String> mEntries = new ArrayList<String>();
+    RequestQueue requestQueue;
+
 
     public NearbyPicturesBackend(Context context, double lat, double lng, int image_offset) {
         this.context = context;
@@ -46,7 +54,61 @@ public class NearbyPicturesBackend implements Runnable{
     public void run() {
         String url = "http://10.0.2.2:8080/api/nearby_pictures"+"/" + this.lat + "_" + this.lng;  // append with search term here
         Log.i("Info", url);
-        RequestQueue queue = Volley.newRequestQueue(context);
+//        Bundle extras = getIntent().getExtras();
+//
+//        offset = extras.getString("OFFSET");
+//        Log.e("Debug", "Offset" + offset);
+//
+//        if (offset != null) {
+//            offsetInt = offsetInt + Integer.parseInt(offset);
+//        }
+//        }
+//        JsonArrayRequest request = new JsonArrayRequest(JsonURL,
+//                new Response.Listener<JSONArray>() {
+//                    @Override
+//                    public void onResponse(JSONArray jsonArray) {
+//                        Log.e("Volley:", "JSON Array");
+//                        for(int i = 0; i < jsonArray.length(); i++) {
+//                            Log.e("Volley:", "JSON Array:Inside Loop");
+//                            //for(int i = 0; i < offsetInt; i++) {
+//                            try {
+//                                //JSONObject jsonObject = jsonArray.getJSONObject(i);
+//                                photoURL = jsonArray.get(i).toString();
+//                                if (photoURL.contains("localhost")) {
+//                                    photoURL = photoURL.replace("localhost", "10.0.2.2");
+//                                }
+//                                //photoURL = jsonObject.getString("url");
+//                                Log.e("photo", photoURL);
+//
+//                                mEntries.add(photoURL);
+//                            }
+//                            catch(JSONException e)
+//                            {
+//                                Log.e("Volley", e.getLocalizedMessage());
+//                            }
+//                        }
+//
+//                        //List<String> sList = subList(mEntries,offsetInt,16);
+//                        GridView gv = (GridView) ((NearbyPictures)context).findViewById(R.id.nearby_gridview);
+//
+//                        ImageAdapter customAdapter = new ImageAdapter( context, mEntries );
+//                        //grid.setAdapter(customAdapter);
+//                       // PictureAdaptor adaptor = new PictureAdaptor(context, mEntries);
+//                        gv.setAdapter(customAdapter);
+//
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError volleyError) {
+//                        Log.e("Volley", volleyError.toString());
+//                    }
+//                });
+
+        //requestQueue = Volley.newRequestQueue(context);
+        //Adds the JSON object request "obreq" to the request queue
+
+       // requestQueue.add(request);
         JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>()
             {
                     @Override
@@ -143,7 +205,7 @@ public class NearbyPicturesBackend implements Runnable{
                 return map;
             }
         };
-        //queue.add(jsonRequest);
+
         MySingleton.getInstance(this.context).addToRequestQueue(jsonRequest);
         }
 //    JsonObjectRequest jsObjRequest = new JsonObjectRequest

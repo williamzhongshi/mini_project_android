@@ -73,6 +73,7 @@ public class ViewStream extends AppCompatActivity implements View.OnClickListene
             if (stream_name != null) {
                 JsonURL = JsonURL + stream_name;
             }
+            Log.d("Debug", "JsonURL is " + JsonURL);
 //            if (JsonURL.contains("localhost")) {
 //                JsonURL = JsonURL.replace("localhost", "10.0.2.2");
 //            }
@@ -108,6 +109,9 @@ public class ViewStream extends AppCompatActivity implements View.OnClickListene
                             try {
                                 //JSONObject jsonObject = jsonArray.getJSONObject(i);
                                 photoURL = jsonArray.get(i).toString();
+                                if (photoURL.contains("localhost")) {
+                                                photoURL = photoURL.replace("localhost", "10.0.2.2");
+                                            }
                                 //photoURL = jsonObject.getString("url");
                                 Log.e("photo", photoURL);
 
