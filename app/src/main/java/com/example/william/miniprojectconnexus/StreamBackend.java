@@ -26,14 +26,16 @@ import java.util.List;
 
 public class StreamBackend implements Runnable{
     private Context context;
+    private String user_email;
 
-    public StreamBackend(Context context) {
+    public StreamBackend(Context context, String in_email) {
         this.context = context;
+        this.user_email = in_email;
     }
 
     @Override
     public void run() {
-        String url = "http://10.0.2.2:8080/api/all_stream";
+        String url = "http://10.0.2.2:8080/api/all_stream" + "/" + user_email;
         Log.i("Info", url);
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
@@ -67,7 +69,6 @@ public class StreamBackend implements Runnable{
                                     public void onResponse(ImageLoader.ImageContainer response, boolean arg1) {
                                         if (response.getBitmap() != null) {
                                             s.setBitmap(response.getBitmap());
-
                                             Log.d("Debug","Response: get the bitmap" + s.getBitmap());
                                         }
                                     }

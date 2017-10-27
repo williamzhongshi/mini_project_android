@@ -221,7 +221,9 @@ public class Camera extends AppCompatActivity {
             captureBuilder.addTarget(reader.getSurface());
             captureBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO);
             captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, ORIENTATIONS.get(Surface.ROTATION_0));
+            Log.d("Debug", "Reading out image");
             final File file = new File(Environment.getExternalStorageDirectory()+"/pic.jpg");
+            Log.d("Debug", "Getting to set image");
             ImageReader.OnImageAvailableListener readerListener = new ImageReader.OnImageAvailableListener() {
                 @Override
                 public void onImageAvailable(ImageReader reader) {
@@ -229,12 +231,15 @@ public class Camera extends AppCompatActivity {
                     try {
                         image = reader.acquireLatestImage();
                         ByteBuffer buffer = image.getPlanes()[0].getBuffer();
+                        image.close();
                         byte[] bytes = new byte[buffer.capacity()];
                         buffer.get(bytes);
+                        //Log.d("Debug", "Max image" + );
                         save(bytes);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                Log.d("Debug", "Setting image");
                                 File imageFile = new File(Environment.getExternalStorageDirectory()+"/pic.jpg");
                                 ImageView jpgView = (ImageView)findViewById(R.id.imageView);
                                 BitmapDrawable d = new BitmapDrawable(getResources(), imageFile.getAbsolutePath());

@@ -157,6 +157,7 @@ public class MainActivity extends AppCompatActivity  implements  GoogleApiClient
             GoogleSignInAccount acct = result.getSignInAccount();
             Log.d("Debug", "Sign-in result " + acct.toString());
             Intent i = new Intent(this, AllStream.class);
+            i.putExtra("EMAIL", acct.getEmail());
             startActivity(i);
             setContentView(R.layout.activity_all_stream);
 //            mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));

@@ -31,8 +31,8 @@ public class ViewStream extends AppCompatActivity implements View.OnClickListene
 
     // URL of object to be parsed
     //String JsonURL = "https://jsonplaceholder.typicode.com/photos";
-    //String JsonURL = "http://10.0.2.2:8080/view_stream/and_viewpics?name=Cats";
-    String JsonURL= "http://williamztest2-182503.appspot.com/view_stream/and_viewpics?name=test%20geo";
+    String JsonURL = "http://10.0.2.2:8080/view_stream/and_viewpics?name=";
+    //String JsonURL= "http://williamztest2-182503.appspot.com/view_stream/and_viewpics?name=test%20geo";
 
     String stream_name= "Cats";
     String offset = "";
@@ -73,7 +73,9 @@ public class ViewStream extends AppCompatActivity implements View.OnClickListene
             if (stream_name != null) {
                 JsonURL = JsonURL + stream_name;
             }
-
+//            if (JsonURL.contains("localhost")) {
+//                JsonURL = JsonURL.replace("localhost", "10.0.2.2");
+//            }
 
             String session_id = extras.getString("SESSION_ID");
             offset = extras.getString("OFFSET");
