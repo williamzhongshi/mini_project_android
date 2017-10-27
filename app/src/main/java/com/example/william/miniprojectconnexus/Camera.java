@@ -120,12 +120,15 @@ public class Camera extends AppCompatActivity {
         @Override
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
             mSurfaceTextureAvailable = true;
+            Log.d("Debug", "**************"+ mSurfaceTextureAvailable);
+            Log.d("Debug", "**************" + mPermissionsGranted);
             if (ActivityCompat.checkSelfPermission(Camera.this, android.Manifest.permission.CAMERA)
                     != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(Camera.this, new String[]{android.Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
                 return;
             }else {
 
+                mPermissionsGranted = true;
                 // Execute some code after 500 milliseconds have passed
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
