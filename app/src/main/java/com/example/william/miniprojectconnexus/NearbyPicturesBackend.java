@@ -97,13 +97,20 @@ public class NearbyPicturesBackend implements Runnable{
                                     return s1.getName().compareTo(s2.getName());
                                 }
                             });
+                            Log.d("Debug", "offset"+image_offset);
+                            Log.d("Debug", "size"+ (PictureInfos.size()-1));
                             if(image_offset>PictureInfos.size()-1){
-                                image_offset = PictureInfos.size()-8-1;
+                                image_offset = image_offset-8 > 0 ? image_offset-8 : 0 ;
                             }
-                            int end_index = image_offset+8 < PictureInfos.size()-1 ? image_offset+8 : PictureInfos.size()-1;
+                            int end_index = image_offset+8 ;
+                            if (end_index >PictureInfos.size()) {
+                                end_index = PictureInfos.size();
+                                //image_offset = (end_index%8) -1;
+                            }
+                            Log.d("Debug", "offset "+image_offset);
+                            Log.d("Debug", "end_index "+ end_index);
                             List <PictureInfo> sub_infos = PictureInfos.subList(image_offset, end_index);
-                            Log.d("Debug","Response: " + sub_infos);
-
+                            Log.d("Debug","Final lists: " + sub_infos);
 
                             GridView gv = (GridView) ((NearbyPictures)context).findViewById(R.id.nearby_gridview);
                             Log.d("Debug", "GridView : " + gv.toString());
@@ -117,25 +124,25 @@ public class NearbyPicturesBackend implements Runnable{
 
                     }
             }, new Response.ErrorListener()
+             {
+            // error
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Toast.makeText(context, "my error :" + error, Toast.LENGTH_LONG).show();
+                Log.i("My error", "" + error);
+            }
+             })
             {
-                // error
-                @Override
-                public void onErrorResponse(VolleyError error) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
 
-                    Toast.makeText(context, "my error :" + error, Toast.LENGTH_LONG).show();
-                    Log.i("My error", "" + error);
-                }
-            })
-            {
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("search_string", "cat");
 
-                    Map<String, String> map = new HashMap<String, String>();
-                    map.put("search_string", "cat");
-
-                    return map;
-                }
-            };
+                return map;
+            }
+        };
         //queue.add(jsonRequest);
         MySingleton.getInstance(this.context).addToRequestQueue(jsonRequest);
         }

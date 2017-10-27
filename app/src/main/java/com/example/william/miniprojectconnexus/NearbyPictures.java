@@ -34,35 +34,6 @@ public class NearbyPictures extends AppCompatActivity implements View.OnClickLis
     double latitude;
     double longitude;
 
-//    private static final String[] LOCATION_PERMS={
-//            Manifest.permission.ACCESS_FINE_LOCATION
-//    };
-//
-//    if(!hasPermission(Manifest.permission.ACCESS_FINE_LOCATION))
-//    {
-//        requestPermissions(LOCATION_PERMS, LOCATION_REQUEST);
-//    }
-//
-//    private static final int LOCATION_REQUEST=INITIAL_REQUEST+3;
-
-
-//    String locationProvider = LocationManager.GPS_PROVIDER;
-
-//
-//    /*----Method to Check GPS is enable or disable ----- */
-//    private Boolean displayGpsStatus() {
-//        ContentResolver contentResolver = getBaseContext()
-//                .getContentResolver();
-//        boolean gpsStatus = Settings.Secure
-//                .isLocationProviderEnabled(contentResolver,
-//                        LocationManager.GPS_PROVIDER);
-//        if (gpsStatus) {
-//            return true;
-//
-//        } else {
-//            return false;
-//        }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,15 +71,7 @@ public class NearbyPictures extends AppCompatActivity implements View.OnClickLis
         findViewById(R.id.more_result).setOnClickListener(this);
         findViewById(R.id.button_to_view_stream).setOnClickListener(this);
     }
-//        locationmanager.requestLocationUpdates("gps", 30000, 100, locationlistener);
-//
-//        if (locationmanager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-//            double lat = LocationManagerHelper.getLatitude();
-//            double lng = LocationManagerHelper.getLongitude();
-//
-//            Log.i("MyLocation1",Double.toString(LocationManagerHelper.getLatitude())+" "+Double.toString(LocationManagerHelper.getLongitude()));
-//
-//        }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -141,26 +104,6 @@ public class NearbyPictures extends AppCompatActivity implements View.OnClickLis
 
 
     }
-
-
-//
-//    public static class LocationManagerHelper implements LocationListener {
-//
-//    private static double latitude;
-//    private static double longitude;
-//
-
-
-//    @Override
-//    public void onProviderDisabled(String provider) { }//not used
-//
-//    @Override
-//    public void onProviderEnabled(String provider) { }//not used
-//
-//    @Override
-//    public void onStatusChanged(String provider, int status, Bundle extras) { }//not used
-//
-//}
 
 
     @Override

@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 public class AllStream extends AppCompatActivity implements View.OnClickListener {
@@ -24,8 +25,10 @@ public class AllStream extends AppCompatActivity implements View.OnClickListener
         if (extras != null) {
             user_email = extras.getString("EMAIL");
         }
+        Button my_subscription_button = (Button) findViewById(R.id.my_subscription);
         if (user_email == null)
         {
+            my_subscription_button.setVisibility(View.INVISIBLE);
             new Thread(new StreamBackend(this, null)).start();
         }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
