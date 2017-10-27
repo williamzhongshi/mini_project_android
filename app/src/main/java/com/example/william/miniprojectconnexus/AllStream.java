@@ -12,19 +12,30 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 public class AllStream extends AppCompatActivity implements View.OnClickListener {
-
+    String user_email = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_stream);
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            user_email = extras.getString("EMAIL");
+        }
+        Button my_subscription_button = (Button) findViewById(R.id.my_subscription);
+        if (user_email == null)
+        {
+            my_subscription_button.setVisibility(View.INVISIBLE);
+            new Thread(new StreamBackend(this, null)).start();
+        }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         findViewById(R.id.to_nearby_pictures).setOnClickListener(this);
         findViewById(R.id.to_search_stream).setOnClickListener(this);
-        new Thread(new StreamBackend(this)).start();
+        findViewById(R.id.my_subscription).setOnClickListener(this);
     }
 
     @Override
@@ -37,7 +48,7 @@ public class AllStream extends AppCompatActivity implements View.OnClickListener
     @Override
     protected void onResume() {
         super.onResume();
-        new Thread(new StreamBackend(this)).start();
+        new Thread(new StreamBackend(this, null)).start();
     }
 
     @Override
@@ -91,7 +102,12 @@ public class AllStream extends AppCompatActivity implements View.OnClickListener
                 i.putExtra("SEARCH_TEXT", search_text);
                 startActivity(i);
                 break;
-
+            case R.id.my_subscription:
+                //TextView tv2 = (TextView) findViewById(R.id.more_result);
+                //String text2 = tv2.getText().toString();
+                Log.d("Debug", "Button Clicked, all stream with subscription streams ");
+                new Thread(new StreamBackend(this, user_email)).start();
+                break;
         }
     }
 }

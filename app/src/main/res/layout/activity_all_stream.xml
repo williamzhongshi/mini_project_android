@@ -83,6 +83,7 @@
 
     </android.support.v7.widget.LinearLayoutCompat>
     <Button
+        android:id="@+id/my_subscription"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="15"
