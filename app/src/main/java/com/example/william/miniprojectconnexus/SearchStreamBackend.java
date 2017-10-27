@@ -95,12 +95,20 @@ public class SearchStreamBackend implements Runnable{
                                     return s1.getName().compareTo(s2.getName());
                                 }
                             });
+                            Log.d("Debug", "offset"+image_offset);
+                            Log.d("Debug", "size"+ (streamInfos.size()-1));
                             if(image_offset>streamInfos.size()-1){
-                                image_offset = streamInfos.size()-8-1;
+                                image_offset = image_offset-8 > 0 ? image_offset-8 : 0 ;
                             }
-                            int end_index = image_offset+8 < streamInfos.size()-1 ? image_offset+8 : streamInfos.size()-1;
+                            int end_index = image_offset+8 ;
+                            if (end_index >streamInfos.size()) {
+                                end_index = streamInfos.size();
+                                //image_offset = (end_index%8) -1;
+                            }
+                            Log.d("Debug", "offset "+image_offset);
+                            Log.d("Debug", "end_index "+ end_index);
                             List <StreamInfo> sub_infos = streamInfos.subList(image_offset, end_index);
-                            Log.d("Debug","Response: " + sub_infos);
+                            Log.d("Debug","Final lists: " + sub_infos);
 
 
                             GridView gv = (GridView) ((SearchStream)context).findViewById(R.id.search_gridview);

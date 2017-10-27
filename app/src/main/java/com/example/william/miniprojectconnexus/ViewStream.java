@@ -77,7 +77,7 @@ public class ViewStream extends AppCompatActivity implements View.OnClickListene
 
             String session_id = extras.getString("SESSION_ID");
             offset = extras.getString("OFFSET");
-            Log.e("Offset",offset);
+            Log.e("Debug", "Offset" + offset);
 
             if (offset != null) {
                 offsetInt = offsetInt + Integer.parseInt(offset);
@@ -141,6 +141,7 @@ public class ViewStream extends AppCompatActivity implements View.OnClickListene
         //Display the results in the grid.
 
 
+
         /*
         JsonObjectRequest obreq = new JsonObjectRequest(Request.Method.GET, JsonURL, null,
                 new Response.Listener<JSONObject>() {
@@ -151,7 +152,7 @@ public class ViewStream extends AppCompatActivity implements View.OnClickListene
                             JSONObject obj = response.getJSONObject("ImgObj");
                             int offset = obj.getInt("offset");
                             arrPhotos = obj.getJSONArray("images");
-                            Log.e("Volley", "Inside onResponse");
+
                         }
                         catch (JSONException e) {
                             // If an error occurs, this prints the error to the log
@@ -160,7 +161,6 @@ public class ViewStream extends AppCompatActivity implements View.OnClickListene
                         }
 
                         if (arrPhotos != null) {
-                            Log.e("Volley","Returned a result");
                             for (int i=0; i< arrPhotos.length(); i++) {
                                 try {
                                     mEntries.add(arrPhotos.getString(i));

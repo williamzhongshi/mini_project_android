@@ -8,10 +8,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 
-public class AllStream extends AppCompatActivity {
+public class AllStream extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +22,9 @@ public class AllStream extends AppCompatActivity {
         setContentView(R.layout.activity_all_stream);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        findViewById(R.id.to_nearby_pictures).setOnClickListener(this);
+        findViewById(R.id.to_search_stream).setOnClickListener(this);
+        new Thread(new StreamBackend(this)).start();
     }
 
     @Override
@@ -57,9 +63,35 @@ public class AllStream extends AppCompatActivity {
             startActivity(new Intent(this, NearbyPictures.class));
             return true;
         }
+        if (id == R.id.Camera) {
+            startActivity(new Intent(this, Camera.class));
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
 
-}
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.to_nearby_pictures:
+                //TextView tv2 = (TextView) findViewById(R.id.more_result);
+                //String text2 = tv2.getText().toString();
+                Log.d("Debug", "Button Clicked, go to nearby pictures ");
+                startActivity(new Intent(this, NearbyPictures.class));
+                break;
+            case R.id.to_search_stream:
+                //TextView tv2 = (TextView) findViewById(R.id.more_result);
+                //String text2 = tv2.getText().toString();
+                Log.d("Debug", "Button Clicked, go to search streams");
+                Intent i = new Intent(this, SearchStream.class);
+                EditText edittext = (EditText) findViewById(R.id.all_stream_search_text);
+                String search_text = edittext.getText().toString();
+                Log.d("Debug", "Calling search stream using name: " + search_text);
+                i.putExtra("SEARCH_TEXT", search_text);
+                startActivity(i);
+                break;
 
+        }
+    }
+}

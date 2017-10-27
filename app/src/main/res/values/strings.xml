@@ -5,4 +5,5 @@
     <string name="project_name">Connexus</string>
     <string name="view_stream">View Stream</string>
     <string name="title_activity_search_stream">SearchStream</string>
+    <string name="Stream">Take picture</string>
 </resources>
