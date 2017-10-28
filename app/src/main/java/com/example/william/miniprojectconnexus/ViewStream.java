@@ -26,10 +26,12 @@ public class ViewStream extends AppCompatActivity implements View.OnClickListene
 
     // URL of object to be parsed
     //String JsonURL = "https://jsonplaceholder.typicode.com/photos";
-    String JsonURL = "http://10.0.2.2:8080/view_stream/and_viewpics?name=";
+    //String JsonURL = "http://10.0.2.2:8080/view_stream/and_viewpics?name=";
+    String JsonURL= "http://10.0.2.2:8080/view_stream/and_viewpics?name=";
+
     //String JsonURL= "http://williamztest2-182503.appspot.com/view_stream/and_viewpics?name=test%20geo";
 
-    String stream_name= "Cats";
+    String stream_name;
     String offset = "";
 
     //this needs to be changed to
@@ -100,13 +102,13 @@ public class ViewStream extends AppCompatActivity implements View.OnClickListene
                         Log.e("Volley:", "JSON Array");
                         for(int i = 0; i < jsonArray.length(); i++) {
                             Log.e("Volley:", "JSON Array:Inside Loop");
-                        //for(int i = 0; i < offsetInt; i++) {
+                            //for(int i = 0; i < offsetInt; i++) {
                             try {
                                 //JSONObject jsonObject = jsonArray.getJSONObject(i);
                                 photoURL = jsonArray.get(i).toString();
                                 if (photoURL.contains("localhost")) {
-                                                photoURL = photoURL.replace("localhost", "10.0.2.2");
-                                            }
+                                    photoURL = photoURL.replace("localhost", "10.0.2.2");
+                                }
                                 //photoURL = jsonObject.getString("url");
                                 Log.e("photo", photoURL);
 
@@ -122,7 +124,7 @@ public class ViewStream extends AppCompatActivity implements View.OnClickListene
                         GridView grid = (GridView) findViewById(R.id.GridImages);
 
 
-                        ImageAdapter customAdapter = new ImageAdapter( getApplicationContext(), sList );
+                        ImageAdapter customAdapter = new ImageAdapter( getApplicationContext(), sList, null);
                         grid.setAdapter(customAdapter);
 
 
@@ -149,6 +151,9 @@ public class ViewStream extends AppCompatActivity implements View.OnClickListene
         if (v == uploadBtn) {
             showUpload();
         }
+        if (v == streamsBtn) {
+            showStreams();
+        }
     }
 
 
@@ -171,6 +176,11 @@ public class ViewStream extends AppCompatActivity implements View.OnClickListene
         startActivity(intent);
     }
 
+    private void showStreams() {
+        Log.e("Streams", "Allstreams Button Clicked");
+        Intent i = new Intent(getApplicationContext(), AllStream.class);
+        getApplicationContext().startActivity(i);
+    }
 
     public static <T> List<T> subList(List<T> list, int offset, int limit) {
         if (offset<0) throw new IllegalArgumentException("Offset must be >=0 but was "+offset+"!");

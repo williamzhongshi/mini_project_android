@@ -19,7 +19,7 @@
         android:id="@+id/imageView"
         android:layout_width="250dp"
         android:layout_height="250dp"
-        android:layout_centerVertical="true"
+        android:layout_alignTop="@+id/texture"
         android:layout_alignStart="@+id/texture" />
 
     <TextureView

@@ -232,11 +232,11 @@ public class Camera extends AppCompatActivity {
                     try {
                         image = reader.acquireLatestImage();
                         ByteBuffer buffer = image.getPlanes()[0].getBuffer();
-                        image.close();
                         byte[] bytes = new byte[buffer.capacity()];
                         buffer.get(bytes);
                         //Log.d("Debug", "Max image" + );
                         save(bytes);
+                        textureView.setVisibility(View.INVISIBLE);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {

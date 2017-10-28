@@ -5,9 +5,6 @@ package com.example.william.miniprojectconnexus;
  */
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,31 +12,26 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.NetworkImageView;
 
-import org.json.JSONArray;
+import org.w3c.dom.Text;
 
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.List;
 
-public class ImageAdapter extends BaseAdapter {
+public class PictureImageAdapter extends BaseAdapter {
     private Context context;
     private List<String> logos;
-    private List<String> parents;
+    private List<Double> dist;
     private ImageView imageView;
     private ImageLoader imageLoader;
 
 
-    public ImageAdapter(Context context, List<String> logos, List<String> parents) {
+    public PictureImageAdapter(Context context, List<String> logos, List<Double> dist) {
         this.context = context;
         this.logos = logos;
-        this.parents = parents;
-
-
+        this.dist = dist;
         Log.e("ImageAdapter","Inside ImageAdapter");
 
 
@@ -61,37 +53,32 @@ public class ImageAdapter extends BaseAdapter {
     }
 
 
-    public View getView(final int i, View view, ViewGroup viewGroup) {
-        final int index = i;
-        ImageView imageview;
+    public View getView(int i, View view, ViewGroup viewGroup) {
+
+        //ImageView imageview;
+        View grid;
+        LayoutInflater inflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
         if(view == null){
-            imageView = new ImageView(context);
+            grid = new View(context);
+            grid = inflater.inflate(R.layout.grid_single, null);
+            TextView textView = (TextView) grid.findViewById(R.id.grid_text);
+            //TextView textView = (TextView) grid.findViewById(R.id.grid_text);
+            imageView = (ImageView) grid.findViewById(R.id.grid_image);
             imageView.setLayoutParams(new GridView.LayoutParams(175, 175));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setPadding(8, 8, 8, 8);
-
+            textView.setText(dist.get(i).toString());
         }
         else {
-            imageView = (ImageView) view;
+            //imageView = (ImageView) view;
+            grid = (View) view;
         }
 
         new ImageLoadTask(logos.get(i), imageView).execute();
-        Log.e("Debug", "setting clicks lol" + parents);
 
-
-        if (parents != null){
-            Log.e("Debug", "setting clicks");
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent stream_view = new Intent(context, ViewStream.class);
-                    stream_view.putExtra("STREAM_NAME", parents.get(index));
-                    context.startActivity(stream_view);
-                }
-            });
-        }
-
-        return imageView;
+        return grid;
 
     }
 

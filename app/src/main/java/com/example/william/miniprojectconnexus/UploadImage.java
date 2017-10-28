@@ -27,6 +27,7 @@ import net.gotev.uploadservice.UploadNotificationConfig;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Random;
 import java.util.UUID;
 
 public class UploadImage extends AppCompatActivity implements View.OnClickListener{
@@ -122,6 +123,8 @@ public class UploadImage extends AppCompatActivity implements View.OnClickListen
 
         filepath = Environment.getExternalStorageDirectory() + "/" + "pic.jpg";
 
+        filepath = getPath(filePath);
+
         String fileName = null;
 
         Cursor c = getContentResolver().query(filePath, null, null, null, null);
@@ -151,9 +154,10 @@ public class UploadImage extends AppCompatActivity implements View.OnClickListen
             String uploadId = UUID.randomUUID().toString();
 
             //creating a mulit part request
+            Random rand = new Random();
             new MultipartUploadRequest(this, uploadId, UploadUrl)
-                    .addFileToUpload(filepath,"image")
-                    .addParameter("txtName",name)
+                    .addFileToUpload(filepath ,"image")
+                    .addParameter("txtName",name + rand.nextInt())
                     .addParameter("stream_name",stream_name)
                     .addParameter("txtComments",name)
                     .addParameter("txtOffset","0")
@@ -165,6 +169,30 @@ public class UploadImage extends AppCompatActivity implements View.OnClickListen
             e.printStackTrace();
         }
     }
+    public String getPath(Uri uri) {
+        String path = "";
+        Log.e("Get Path", uri.toString());
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        String document_id = cursor.getString(0);
+        document_id = document_id.substring(document_id.lastIndexOf(":") + 1);
+        Log.e("Get Path:doc Id",document_id);
+
+        cursor.close();
+
+        cursor = getContentResolver().query(
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
+        Log.e("Get Path", "Second Cursor call");
+
+        if (cursor.moveToFirst()) {
+            path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+        }
+        cursor.close();
+
+        Log.e("Image Upload", path);
+        return path;
+    }
 
     @Override
     public void onClick(View v) {
@@ -174,7 +202,8 @@ public class UploadImage extends AppCompatActivity implements View.OnClickListen
         }
         if (v == buttonUpload) {
             uploadMultipart();
-
+            Intent intent = new Intent(UploadImage.this, AllStream.class);
+            startActivity(intent);
         }
         if (v == buttonCamera) {
             Intent intent = new Intent(UploadImage.this, Camera.class);
