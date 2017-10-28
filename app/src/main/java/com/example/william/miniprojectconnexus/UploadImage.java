@@ -1,12 +1,17 @@
 package com.example.william.miniprojectconnexus;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -38,6 +43,8 @@ public class UploadImage extends AppCompatActivity implements View.OnClickListen
 
     private EditText editText;
     private TextView viewStream;
+    double latitude;
+    double longitude;
 
     //Image request code
     private int PICK_IMAGE_REQUEST = 1;
@@ -53,6 +60,8 @@ public class UploadImage extends AppCompatActivity implements View.OnClickListen
     String stream_name;
     RequestQueue requestQueue;
     private String filepath;
+    private LocationManager locationmanager;
+    private LocationListener locationlistener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +110,31 @@ public class UploadImage extends AppCompatActivity implements View.OnClickListen
         requestQueue = Volley.newRequestQueue(UploadImage.this);
 
         requestQueue.add(obreq);
+        locationmanager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationlistener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location loc) {
+                latitude = loc.getLatitude();
+                longitude = loc.getLongitude();
+                Log.i("Debug", "My location changed to f" + Double.toString(latitude) + " " + Double.toString(longitude));
+            }
+
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String s) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String s) {
+                Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(i);
+            }
+        };
     }
 
 
@@ -161,6 +195,8 @@ public class UploadImage extends AppCompatActivity implements View.OnClickListen
                     .addParameter("stream_name",stream_name)
                     .addParameter("txtComments",name)
                     .addParameter("txtOffset","0")
+                    .addParameter("latitude", String.valueOf(latitude))
+                    .addParameter("longitude", String.valueOf(longitude))
                     .setNotificationConfig(new UploadNotificationConfig())
                     .setMaxRetries(2)
                     .startUpload();
