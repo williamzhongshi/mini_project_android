@@ -26,16 +26,19 @@ public class AllStream extends AppCompatActivity implements View.OnClickListener
             user_email = extras.getString("EMAIL");
         }
         Button my_subscription_button = (Button) findViewById(R.id.my_subscription);
-        if (user_email == null)
-        {
-            my_subscription_button.setVisibility(View.INVISIBLE);
-            new Thread(new StreamBackend(this, null)).start();
-        }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         findViewById(R.id.to_nearby_pictures).setOnClickListener(this);
         findViewById(R.id.to_search_stream).setOnClickListener(this);
         findViewById(R.id.my_subscription).setOnClickListener(this);
+        if (user_email == null)
+        {
+            my_subscription_button.setVisibility(View.INVISIBLE);
+            new Thread(new StreamBackend(this, null)).start();
+        }else{
+            new Thread(new StreamBackend(this, user_email)).start();
+        }
+
     }
 
     @Override
