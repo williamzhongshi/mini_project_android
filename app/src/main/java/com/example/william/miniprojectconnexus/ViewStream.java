@@ -26,10 +26,12 @@ public class ViewStream extends AppCompatActivity implements View.OnClickListene
 
     // URL of object to be parsed
     //String JsonURL = "https://jsonplaceholder.typicode.com/photos";
-    String JsonURL = "http://10.0.2.2:8080/view_stream/and_viewpics?name=";
+    //String JsonURL = "http://10.0.2.2:8080/view_stream/and_viewpics?name=";
+    String JsonURL= "http://10.0.2.2:8080/view_stream/and_viewpics?name=";
+
     //String JsonURL= "http://williamztest2-182503.appspot.com/view_stream/and_viewpics?name=test%20geo";
 
-    String stream_name= "Cats";
+    String stream_name;
     String offset = "";
 
     //this needs to be changed to
@@ -149,6 +151,9 @@ public class ViewStream extends AppCompatActivity implements View.OnClickListene
         if (v == uploadBtn) {
             showUpload();
         }
+        if (v == streamsBtn) {
+            showStreams();
+        }
     }
 
 
@@ -171,6 +176,11 @@ public class ViewStream extends AppCompatActivity implements View.OnClickListene
         startActivity(intent);
     }
 
+    private void showStreams() {
+        Log.e("Streams", "Allstreams Button Clicked");
+        Intent i = new Intent(getApplicationContext(), AllStream.class);
+        getApplicationContext().startActivity(i);
+    }
 
     public static <T> List<T> subList(List<T> list, int offset, int limit) {
         if (offset<0) throw new IllegalArgumentException("Offset must be >=0 but was "+offset+"!");

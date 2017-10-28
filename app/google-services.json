@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "555439113558",
-    "project_id": "shiyangguestbook"
+    "project_number": "100101802807",
+    "project_id": "miniprojectconnexus"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:555439113558:android:975c7539052574a8",
+        "mobilesdk_app_id": "1:100101802807:android:975c7539052574a8",
         "android_client_info": {
           "package_name": "com.example.william.miniprojectconnexus"
         }
       },
       "oauth_client": [
         {
-          "client_id": "555439113558-8klkrjv1ti52u0iplsrae2acts5e4ft5.apps.googleusercontent.com",
+          "client_id": "100101802807-1fevi55bdron5ps1jv3pbm3q7dd74vtg.apps.googleusercontent.com",
           "client_type": 3
         },
         {
-          "client_id": "555439113558-r3p2s8jqf7ovna998jdecemehatvquu2.apps.googleusercontent.com",
+          "client_id": "100101802807-d6mhheguj6es9ikadneevlt2uape0cln.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.william.miniprojectconnexus",
-            "certificate_hash": "ad1436d136cafd40db022a2ffc8ccec4e39cb2b9"
+            "certificate_hash": "eaec189c797e80d69719366c42f7d5feda1570bf"
           }
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAZvNNuOxztvObPxaaxQCCEoppDJc22T1g"
+          "current_key": "AIzaSyD33LK3prF5XPa6phamm5zt1VBychSasd0"
         }
       ],
       "services": {
