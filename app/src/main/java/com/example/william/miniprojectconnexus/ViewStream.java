@@ -1,17 +1,22 @@
 package com.example.william.miniprojectconnexus;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.AdapterView;
 
+
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -26,8 +31,8 @@ public class ViewStream extends AppCompatActivity implements View.OnClickListene
 
     // URL of object to be parsed
     //String JsonURL = "https://jsonplaceholder.typicode.com/photos";
-    String JsonURL = "http://10.0.2.2:8080/view_stream/and_viewpics?name=";
-    //String JsonURL= "http://williamztest2-182503.appspot.com/view_stream/and_viewpics?name=test%20geo";
+    //String JsonURL = "http://10.0.2.2:8080/view_stream/and_viewpics?name=Cats";
+    String JsonURL= "http://williamztest2-182503.appspot.com/view_stream/and_viewpics?name=test%20geo";
 
     String stream_name= "Cats";
     String offset = "";
@@ -68,10 +73,7 @@ public class ViewStream extends AppCompatActivity implements View.OnClickListene
             if (stream_name != null) {
                 JsonURL = JsonURL + stream_name;
             }
-            Log.d("Debug", "JsonURL is " + JsonURL);
-//            if (JsonURL.contains("localhost")) {
-//                JsonURL = JsonURL.replace("localhost", "10.0.2.2");
-//            }
+
 
             String session_id = extras.getString("SESSION_ID");
             offset = extras.getString("OFFSET");
@@ -104,9 +106,6 @@ public class ViewStream extends AppCompatActivity implements View.OnClickListene
                             try {
                                 //JSONObject jsonObject = jsonArray.getJSONObject(i);
                                 photoURL = jsonArray.get(i).toString();
-                                if (photoURL.contains("localhost")) {
-                                                photoURL = photoURL.replace("localhost", "10.0.2.2");
-                                            }
                                 //photoURL = jsonObject.getString("url");
                                 Log.e("photo", photoURL);
 
@@ -138,6 +137,111 @@ public class ViewStream extends AppCompatActivity implements View.OnClickListene
         //Adds the JSON object request "obreq" to the request queue
 
         requestQueue.add(request);
+
+        //Display the results in the grid.
+
+
+
+        /*
+        JsonObjectRequest obreq = new JsonObjectRequest(Request.Method.GET, JsonURL, null,
+                new Response.Listener<JSONObject>() {
+
+                    //Takes the response from the JSON request
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONObject obj = response.getJSONObject("ImgObj");
+                            int offset = obj.getInt("offset");
+                            arrPhotos = obj.getJSONArray("images");
+
+                        }
+                        catch (JSONException e) {
+                            // If an error occurs, this prints the error to the log
+                            e.printStackTrace();
+                            Log.e("Volley", "Error:JSON Exception");
+                        }
+
+                        if (arrPhotos != null) {
+                            for (int i=0; i< arrPhotos.length(); i++) {
+                                try {
+                                    mEntries.add(arrPhotos.getString(i));
+                                }
+                                catch (JSONException e) {
+                                    Log.e("JSON Exception",e.toString());
+                                }
+                            }
+                        }
+
+                        List<String> sList = subList(mEntries,offsetInt,16);
+                        GridView grid = (GridView) findViewById(R.id.GridImages);
+
+
+                        ImageAdapter customAdapter = new ImageAdapter( getApplicationContext(), sList );
+                        grid.setAdapter(customAdapter);
+
+                    }
+                },
+                new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+                        Log.e("Volley", error.toString());
+
+                    }
+                } );
+        requestQueue = Volley.newRequestQueue(ViewStream.this);
+        //Adds the JSON object request "obreq" to the request queue
+
+        requestQueue.add(obreq);
+
+        Log.e("Volley","Image URLS");
+
+        /*
+        //Test <code></code>
+        JSONObject jo = new JSONObject();
+        try {
+            jo.put("images", "http://localhost:8080/_ah/img/BMjBTv9yHB3KG6bJRuuHnQ==");
+        }
+        catch (JSONException e)
+        {
+            Log.e("Mini_project_android", "Unexpected JSON exception", e);
+        }
+
+        arrPhotos = new JSONArray();
+        arrPhotos.put(jo);
+
+        */
+
+
+
+        /*
+        List<String> listdata = new ArrayList<String>();
+        Log.e("Mini_project_android", "Outside if condition");
+        if (mEntries != null) {
+            Log.e("Mini_project_android", "Inside if condition");
+            for (int i=0;i<mEntries.size();i++){
+                //listdata.add(mEntries.toString());
+                listdata.add(mEntries.get(i));
+                Log.e("Item:", mEntries.get(i) );
+                /*
+                try {
+                    listdata.add(mEntries.toString());
+                    Log.e("Mini_project_android", "Added new Item");
+                }
+                catch (exception e){
+                    Log.e("Mini_project_android", "Unexpected JSON exception", e);
+                }
+
+            }
+        }
+        else
+        {
+            Log.e("Volly","Nothing Returned");
+        }
+        */
+
+
+
     }
 
 
@@ -148,6 +252,9 @@ public class ViewStream extends AppCompatActivity implements View.OnClickListene
         }
         if (v == uploadBtn) {
             showUpload();
+        }
+        if (v == streamsBtn) {
+            showStreams();
         }
     }
 
@@ -166,11 +273,14 @@ public class ViewStream extends AppCompatActivity implements View.OnClickListene
         Log.e("Upload", "Upload Button Clicked");
         Intent i = new Intent(getApplicationContext(), UploadImage.class);
         i.putExtra("STREAM_NAME", stream_name);
-        Intent intent = new Intent(ViewStream.this, UploadImage.class);
-        intent.putExtra("STREAM_NAME", stream_name);
-        startActivity(intent);
+        getApplicationContext().startActivity(i);
     }
 
+    private void showStreams() {
+        Log.e("Streams", "Allstreams Button Clicked");
+        Intent i = new Intent(getApplicationContext(), AllStream.class);
+        getApplicationContext().startActivity(i);
+    }
 
     public static <T> List<T> subList(List<T> list, int offset, int limit) {
         if (offset<0) throw new IllegalArgumentException("Offset must be >=0 but was "+offset+"!");

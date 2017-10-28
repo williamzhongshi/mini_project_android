@@ -1,33 +1,62 @@
 package com.example.william.miniprojectconnexus;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
-import android.os.Bundle;
-import android.os.Environment;
-import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.android.volley.RequestQueue;
 
+import net.gotev.uploadservice.ContentType;
 import net.gotev.uploadservice.MultipartUploadRequest;
 import net.gotev.uploadservice.UploadNotificationConfig;
 
+
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.List;
 import java.util.UUID;
+
+
 
 public class UploadImage extends AppCompatActivity implements View.OnClickListener{
 
@@ -47,11 +76,16 @@ public class UploadImage extends AppCompatActivity implements View.OnClickListen
      //Uri to store the image uri
     private Uri filePath;
     String UploadUrl;
-    String JsonURL= "http://10.0.2.2:8080/api/uploadfile";
+    String JsonURL= "https://apt-maroon-148823.appspot.com/view_stream/and_getURL";
 
     String stream_name;
     RequestQueue requestQueue;
-    private String filepath;
+
+    private LocationManager locationmanager;
+    private LocationListener locationlistener;
+    double latitude;
+    double longitude;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,25 +104,38 @@ public class UploadImage extends AppCompatActivity implements View.OnClickListen
         editText = (EditText) findViewById(R.id.editTextName);
         viewStream = (TextView) findViewById(R.id.textStream);
 
-        stream_name = getIntent().getStringExtra("STREAM_NAME");
 
+        Log.e("UploadImage","Inside UploadImage");
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            Log.e("Extras:UploadImage", "Inside Extra");
+            stream_name = extras.getString("STREAM_NAME");
+
+        }
         viewStream.setText( "Stream:" + stream_name);
-        JsonURL += "?stream_name=" + stream_name;
-        Log.e("**************", "URL:" + JsonURL);
+
+        //ActivityCompat.requestPermissions(UploadImage.this,
+         //       new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},1);
+
+        // The following code gets the JSON results as an array
 
         JsonObjectRequest obreq = new JsonObjectRequest(Request.Method.GET, JsonURL, null,
                 new Response.Listener<JSONObject>() {
 
+                    //Takes the response from the JSON request
                     public void onResponse(JSONObject response) {
                         try {
-                            UploadUrl = response.getString("url");
-                            buttonChoose.setEnabled(true);
-                            Log.e("Volley response", ""+ UploadUrl);
-                        }
-                        catch(JSONException e)
-                        {
-                            Log.e("Volley", e.getLocalizedMessage());
-                        }
+                            JSONObject obj = response.getJSONObject("objUrl");
+                                 UploadUrl = obj.getString("url");
+                                //photoURL = jsonObject.getString("url");
+                                Log.e("photo:UploadImage", UploadUrl);
+                                buttonChoose.setEnabled(true);
+                            }
+                            catch(JSONException e)
+                            {
+                                Log.e("Volley", e.getLocalizedMessage());
+                            }
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -97,9 +144,43 @@ public class UploadImage extends AppCompatActivity implements View.OnClickListen
                         Log.e("Volley", volleyError.toString());
                     }
                 });
+
+        obreq.setRetryPolicy(new DefaultRetryPolicy(5000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         requestQueue = Volley.newRequestQueue(UploadImage.this);
+        //Adds the JSON object request "obreq" to the request queue
+
 
         requestQueue.add(obreq);
+        Log.e("Volley","No Result");
+
+
+        locationmanager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationlistener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location loc) {
+                latitude = loc.getLatitude();
+                longitude = loc.getLongitude();
+                Log.i("Debug", "My location changed to f" + Double.toString(latitude) + " " + Double.toString(longitude));
+            }
+
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String s) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String s) {
+                Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(i);
+            }
+        };
     }
 
 
@@ -118,33 +199,19 @@ public class UploadImage extends AppCompatActivity implements View.OnClickListen
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null  && data.getData() != null) {
             filePath = data.getData();
         }
-        final String docId = DocumentsContract.getDocumentId(filePath);
 
-        filepath = Environment.getExternalStorageDirectory() + "/" + "pic.jpg";
-
-        String fileName = null;
-
-        Cursor c = getContentResolver().query(filePath, null, null, null, null);
-
-
-        int id = c.getColumnIndex(MediaStore.Images.Media.TITLE);
-
-        Log.e("SELECT", ""+filepath);
-        Log.e("SELECT", ""+docId);
-        Log.e("SELECT", ""+"" + id);
     }
 
+
     public void uploadMultipart() {
+        //Getting the name of the image
+        Log.e("Image Upload", "Inside Upload Mulitpart");
         String name = editText.getText().toString().trim();
+        String boundary = "*****";
 
         //Getting the actual path of the image
-        Log.e("ImageUpload", "Inside Upload Mulitpart|" + filePath);
-        String cameraPath = getIntent().getStringExtra("path");
-        if(cameraPath != null) {
-            filepath = cameraPath;
-            stream_name = getIntent().getStringExtra("Stream");
-        }
-        Log.e("ImageUpload", "stream file|" + filepath +"|"+ stream_name);
+        String path = getPath(filePath);
+
 
 
         try {
@@ -152,19 +219,76 @@ public class UploadImage extends AppCompatActivity implements View.OnClickListen
 
             //creating a mulit part request
             new MultipartUploadRequest(this, uploadId, UploadUrl)
-                    .addFileToUpload(filepath,"image")
-                    .addParameter("txtName",name)
-                    .addParameter("stream_name",stream_name)
-                    .addParameter("txtComments",name)
-                    .addParameter("txtOffset","0")
+                    .addFileToUpload(path, name)
+                    .addParameter("stream_name", stream_name)
+                    .addParameter("latitude", String.valueOf(latitude))
+                    .addParameter("longiitude", String.valueOf(longitude))
                     .setNotificationConfig(new UploadNotificationConfig())
                     .setMaxRetries(2)
                     .startUpload();
+        } catch (Exception e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
-        catch (Exception e) {
-            e.printStackTrace();
+
+
+
+
+        Log.e("Image Upload", "End of Upload Mulitpart");
+    }
+
+
+
+
+
+    public String getPath(Uri uri) {
+        String path = "";
+        Log.e("Get Path", uri.toString());
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        String document_id = cursor.getString(0);
+        document_id = document_id.substring(document_id.lastIndexOf(":") + 1);
+        Log.e("Get Path:doc Id",document_id);
+
+        cursor.close();
+
+        cursor = getContentResolver().query(
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
+        Log.e("Get Path", "Second Cursor call");
+
+        if (cursor.moveToFirst()) {
+            path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+        }
+        cursor.close();
+
+        Log.e("Image Upload", path);
+        return path;
+    }
+
+    /*
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission granted and now can proceed
+                   // mymethod(); //a sample method called
+                    //uploadMultipart();
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(UploadImage.this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+            // add other cases for more permissions
         }
     }
+
+    */
 
     @Override
     public void onClick(View v) {
@@ -176,10 +300,9 @@ public class UploadImage extends AppCompatActivity implements View.OnClickListen
             uploadMultipart();
 
         }
-        if (v == buttonCamera) {
-            Intent intent = new Intent(UploadImage.this, Camera.class);
-            intent.putExtra("Stream", stream_name);
-            startActivity(intent);
-        }
     }
+
+
+
+
 }
