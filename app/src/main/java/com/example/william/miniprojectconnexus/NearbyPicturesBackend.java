@@ -41,6 +41,7 @@ public class NearbyPicturesBackend implements Runnable{
     int num_pic = 16;
     String photoURL="";
     private ArrayList<String> mEntries = new ArrayList<String>();
+    private ArrayList<String> pEntries = new ArrayList<String>();
     private ArrayList<Double> dEntries = new ArrayList<Double>();
     RequestQueue requestQueue;
 
@@ -132,6 +133,7 @@ public class NearbyPicturesBackend implements Runnable{
                                 String name = c.getString("name");
                                 String cover_url = c.getString("url");
                                 Double distance = c.getDouble("distance");
+                                String parent = c.getString("parent");
                                 Log.e("Debug", "Found distance" + distance);
 
                                 ImageLoader loader = MySingleton.getInstance(context).getImageLoader();
@@ -143,6 +145,7 @@ public class NearbyPicturesBackend implements Runnable{
                                 final PictureInfo s1 = new PictureInfo(name, cover_url);
                                 mEntries.add(cover_url);
                                 dEntries.add(distance);
+                                pEntries.add(parent);
 
                                 PictureInfos.add(s1);
                                 Log.i("Debug","GOT URL " + s1.getCoverUrl());
@@ -201,9 +204,11 @@ public class NearbyPicturesBackend implements Runnable{
                             Log.d("Debug", "offset "+image_offset);
                             Log.d("Debug", "end_index "+ end_index);
                             List<String> sub_infos = mEntries.subList(image_offset, end_index);
-                            List<Double> sub_dist = dEntries.subList(image_offset, end_index);
+                            List<String> sub_parents = pEntries.subList(image_offset, end_index);
+                            //List<Double> sub_dist = dEntries.subList(image_offset, end_index);
                             GridView gv = (GridView) ((NearbyPictures)context).findViewById(R.id.nearby_gridview);
-                            ImageAdapter adaptor = new ImageAdapter(context, sub_infos);
+                            Log.e("Debug", "Input parents " + sub_parents);
+                            ImageAdapter adaptor = new ImageAdapter(context, sub_infos, sub_parents);
                             //PictureImageAdapter adaptor = new PictureImageAdapter(context, sub_infos, sub_dist);
                             gv.setAdapter(adaptor);
 

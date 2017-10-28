@@ -5,6 +5,7 @@ package com.example.william.miniprojectconnexus;
  */
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -28,13 +29,16 @@ import java.util.List;
 public class ImageAdapter extends BaseAdapter {
     private Context context;
     private List<String> logos;
+    private List<String> parents;
     private ImageView imageView;
     private ImageLoader imageLoader;
 
 
-    public ImageAdapter(Context context, List<String> logos) {
+    public ImageAdapter(Context context, List<String> logos, List<String> parents) {
         this.context = context;
         this.logos = logos;
+        this.parents = parents;
+
 
         Log.e("ImageAdapter","Inside ImageAdapter");
 
@@ -57,8 +61,8 @@ public class ImageAdapter extends BaseAdapter {
     }
 
 
-    public View getView(int i, View view, ViewGroup viewGroup) {
-
+    public View getView(final int i, View view, ViewGroup viewGroup) {
+        final int index = i;
         ImageView imageview;
         if(view == null){
             imageView = new ImageView(context);
@@ -72,6 +76,20 @@ public class ImageAdapter extends BaseAdapter {
         }
 
         new ImageLoadTask(logos.get(i), imageView).execute();
+        Log.e("Debug", "setting clicks lol" + parents);
+
+
+        if (parents != null){
+            Log.e("Debug", "setting clicks");
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent stream_view = new Intent(context, ViewStream.class);
+                    stream_view.putExtra("STREAM_NAME", parents.get(index));
+                    context.startActivity(stream_view);
+                }
+            });
+        }
 
         return imageView;
 

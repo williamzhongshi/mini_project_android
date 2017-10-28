@@ -124,7 +124,7 @@ public class ViewStream extends AppCompatActivity implements View.OnClickListene
                         GridView grid = (GridView) findViewById(R.id.GridImages);
 
 
-                        ImageAdapter customAdapter = new ImageAdapter( getApplicationContext(), sList );
+                        ImageAdapter customAdapter = new ImageAdapter( getApplicationContext(), sList, null);
                         grid.setAdapter(customAdapter);
 
 
