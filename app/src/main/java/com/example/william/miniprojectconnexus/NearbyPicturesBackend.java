@@ -38,8 +38,10 @@ public class NearbyPicturesBackend implements Runnable{
     private double lng;
     private int image_offset;
     int offset = 0;
+    int num_pic = 16;
     String photoURL="";
     private ArrayList<String> mEntries = new ArrayList<String>();
+    private ArrayList<Double> dEntries = new ArrayList<Double>();
     RequestQueue requestQueue;
 
 
@@ -123,10 +125,14 @@ public class NearbyPicturesBackend implements Runnable{
                             jsonObj = new JSONObject(response.toString());
                             JSONArray pictures = jsonObj.getJSONArray("body");
                             List<PictureInfo> PictureInfos = new ArrayList<>();
+
                             for (int i = 0; i < pictures.length(); i++) {
                                 JSONObject c = pictures.getJSONObject(i);
+                                Log.e("JSONOBJ", "is " + c.toString());
                                 String name = c.getString("name");
                                 String cover_url = c.getString("url");
+                                Double distance = c.getDouble("distance");
+                                Log.e("Debug", "Found distance" + distance);
 
                                 ImageLoader loader = MySingleton.getInstance(context).getImageLoader();
                                 //cover_url = "https://i.ytimg.com/vi/AGsvuFB_aEY/maxresdefault.jpg";
@@ -135,48 +141,70 @@ public class NearbyPicturesBackend implements Runnable{
                                     cover_url = cover_url.replace("localhost", "10.0.2.2");
                                 }
                                 final PictureInfo s1 = new PictureInfo(name, cover_url);
+                                mEntries.add(cover_url);
+                                dEntries.add(distance);
+
                                 PictureInfos.add(s1);
                                 Log.i("Debug","GOT URL " + s1.getCoverUrl());
 
-                                loader.get(cover_url, new ImageLoader.ImageListener() {
-
-                                    public void onErrorResponse(VolleyError error) {
-                                        Log.e("Error", "Volley Error");
-                                        error.printStackTrace();
-                                    }
-
-                                    public void onResponse(ImageLoader.ImageContainer response, boolean arg1) {
-                                        if (response.getBitmap() != null) {
-                                            s1.setBitmap(response.getBitmap());
-                                            Log.d("Debug", "Processing photo: " + s1.getName());
-                                            Log.d("Debug","Response: get the bitmap " + s1.getBitmap());
-                                        }
-                                    }
-                                });
+//                                loader.get(cover_url, new ImageLoader.ImageListener() {
+//
+//                                    public void onErrorResponse(VolleyError error) {
+//                                        Log.e("Error", "Volley Error");
+//                                        error.printStackTrace();
+//                                    }
+//
+//                                    public void onResponse(ImageLoader.ImageContainer response, boolean arg1) {
+//                                        if (response.getBitmap() != null) {
+//                                            s1.setBitmap(response.getBitmap());
+//                                            Log.d("Debug", "Processing photo: " + s1.getName());
+//                                            Log.d("Debug","Response: get the bitmap " + s1.getBitmap());
+//                                        }
+//                                    }
+//                                });
                             }
-                            Collections.sort(PictureInfos, new Comparator<PictureInfo>(){
-                                public int compare(PictureInfo s1, PictureInfo s2){
-                                    return s1.getName().compareTo(s2.getName());
-                                }
-                            });
+//                            Collections.sort(PictureInfos, new Comparator<PictureInfo>(){
+//                                public int compare(PictureInfo s1, PictureInfo s2){
+//                                    return s1.getName().compareTo(s2.getName());
+//                                }
+//                            });
+//                            Log.d("Debug", "offset"+image_offset);
+//                            Log.d("Debug", "size"+ (PictureInfos.size()-1));
+//                            if(image_offset>PictureInfos.size()-1){
+//                                image_offset = image_offset-8 > 0 ? image_offset-8 : 0 ;
+//                            }
+//                            int end_index = image_offset+8 ;
+//                            if (end_index >PictureInfos.size()) {
+//                                end_index = PictureInfos.size();
+//                                //image_offset = (end_index%8) -1;
+//                            }
+//                            Log.d("Debug", "offset "+image_offset);
+//                            Log.d("Debug", "end_index "+ end_index);
+//                            List <PictureInfo> sub_infos = PictureInfos.subList(image_offset, end_index);
+//                            Log.d("Debug","Final lists: " + sub_infos);
+
+//                            GridView gv = (GridView) ((NearbyPictures)context).findViewById(R.id.nearby_gridview);
+//                            Log.d("Debug", "GridView : " + gv.toString());
+//                            PictureAdaptor adaptor = new PictureAdaptor(context, sub_infos);
+
+                            //
                             Log.d("Debug", "offset"+image_offset);
-                            Log.d("Debug", "size"+ (PictureInfos.size()-1));
-                            if(image_offset>PictureInfos.size()-1){
-                                image_offset = image_offset-8 > 0 ? image_offset-8 : 0 ;
+                            Log.d("Debug", "size"+ (mEntries.size()-1));
+                            if(image_offset>mEntries.size()-1){
+                                image_offset = image_offset-num_pic > 0 ? image_offset-num_pic : 0 ;
                             }
-                            int end_index = image_offset+8 ;
-                            if (end_index >PictureInfos.size()) {
-                                end_index = PictureInfos.size();
+                            int end_index = image_offset+num_pic ;
+                            if (end_index >mEntries.size()) {
+                                end_index = mEntries.size();
                                 //image_offset = (end_index%8) -1;
                             }
                             Log.d("Debug", "offset "+image_offset);
                             Log.d("Debug", "end_index "+ end_index);
-                            List <PictureInfo> sub_infos = PictureInfos.subList(image_offset, end_index);
-                            Log.d("Debug","Final lists: " + sub_infos);
-
+                            List<String> sub_infos = mEntries.subList(image_offset, end_index);
+                            List<Double> sub_dist = dEntries.subList(image_offset, end_index);
                             GridView gv = (GridView) ((NearbyPictures)context).findViewById(R.id.nearby_gridview);
-                            Log.d("Debug", "GridView : " + gv.toString());
-                            PictureAdaptor adaptor = new PictureAdaptor(context, sub_infos);
+                            ImageAdapter adaptor = new ImageAdapter(context, sub_infos);
+                            //PictureImageAdapter adaptor = new PictureImageAdapter(context, sub_infos, sub_dist);
                             gv.setAdapter(adaptor);
 
                         } catch (JSONException e) {
