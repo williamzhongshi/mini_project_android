@@ -35,7 +35,7 @@ public class StreamBackend implements Runnable{
 
     @Override
     public void run() {
-        String url = "http://10.0.2.2:8080/api/all_stream" + "/" + user_email;
+        String url = "http://williamztest2-182503.appspot.com/api/all_stream" + "/" + user_email;
         Log.i("Info", url);
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest

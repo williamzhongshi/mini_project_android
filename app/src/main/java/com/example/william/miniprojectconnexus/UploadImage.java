@@ -55,7 +55,7 @@ public class UploadImage extends AppCompatActivity implements View.OnClickListen
      //Uri to store the image uri
     private Uri filePath;
     String UploadUrl;
-    String JsonURL= "http://10.0.2.2:8080/api/uploadfile";
+    String JsonURL= "http://williamztest2-182503.appspot.com/api/uploadfile";
 
     String stream_name;
     RequestQueue requestQueue;
@@ -186,7 +186,7 @@ public class UploadImage extends AppCompatActivity implements View.OnClickListen
 
         try {
             String uploadId = UUID.randomUUID().toString();
-
+            Log.e("ImageUpload", "uploadurl" + UploadUrl);
             //creating a mulit part request
             Random rand = new Random();
             new MultipartUploadRequest(this, uploadId, UploadUrl)

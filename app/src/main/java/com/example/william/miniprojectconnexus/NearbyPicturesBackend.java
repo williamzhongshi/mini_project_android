@@ -55,7 +55,7 @@ public class NearbyPicturesBackend implements Runnable{
 
     @Override
     public void run() {
-        String url = "http://10.0.2.2:8080/api/nearby_pictures"+"/" + this.lat + "_" + this.lng;  // append with search term here
+        String url = "http://williamztest2-182503.appspot.com/api/nearby_pictures"+"/" + this.lat + "_" + this.lng;  // append with search term here
         Log.i("Info", url);
 //        Bundle extras = getIntent().getExtras();
 //
